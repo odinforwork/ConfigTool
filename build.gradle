@@ -10,8 +10,19 @@ repositories {
 }
 
 dependencies {
+    testImplementation 'org.projectlombok:lombok:1.18.22'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+    //important!!!
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.6.6'
+
 }
 
 test {

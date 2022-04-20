@@ -12,7 +12,7 @@ public class FileInfo {
     private final String mFileName;
     private final Map<String, BlockInfo> mBlockInfos;
 
-    public FileInfo(File file) {
+    public FileInfo(File file) throws Exception{
         mFileName = file.getName();
         mBlockInfos = BlockInfo.getBlockInfos(file);
     }

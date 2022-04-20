@@ -1,5 +1,6 @@
 package data.Different;
 
+import data.File.BlockInfo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -10,5 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DifferentInFile {
     private final String mFileName;
-    private List<DifferentInBlock> mDIB = new ArrayList<>();
+    private List<BlockInfo> mNewBlocks = new ArrayList<>();
+    private List<BlockInfo> mDeleteBlocks = new ArrayList<>();
+    private List<DifferentInBlock> mDifferentInBlocks = new ArrayList<>();
 }

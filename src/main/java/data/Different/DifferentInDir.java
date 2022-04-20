@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class DifferentInDir {
-    private final List<String> mNewFile = new ArrayList<>(10);
-    private final List<String> mDeleteFile = new ArrayList<>(10);
-    private final List<DifferentInFile> mDif = new ArrayList<>(10);
+    private final List<String> mNewFiles = new ArrayList<>(10);
+    private final List<String> mDeleteFiles = new ArrayList<>(10);
+    private final List<DifferentInFile> mDifferentInFiles = new ArrayList<>(10);
 }

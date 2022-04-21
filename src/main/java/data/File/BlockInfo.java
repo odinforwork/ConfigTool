@@ -2,14 +2,10 @@ package data.File;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import data.Different.DifferentInBlock;
-import data.Different.DifferentInLine;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -17,7 +13,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BlockInfo implements Cloneable{
     private final String mBlockName;
-    private List<String> mInfos = new ArrayList<>(7);
+    private Map<String, String> mInfos = new HashMap<>(8);
 
     public static Map<String, BlockInfo> getBlockInfos(File file) throws Exception{
         Map<String, BlockInfo> result = new HashMap<>();
@@ -32,21 +28,15 @@ public class BlockInfo implements Cloneable{
 
                 } else if (isTitle(str)) {
                     if (bi != null) {
-                        result.put(str, bi);
-
-                        if(bi.getMInfos().size() != 7){
-                            log.info(file.getName());
-                            log.info(bi.getMBlockName());
-                            bi.getMInfos().forEach(log::info);
-                            log.trace("");
-                        }
+                        result.put(bi.getMBlockName(), bi);
                     }
                     bi = new BlockInfo(str);
                 } else {
                     if(bi == null){
                         throw new Exception(file.getAbsolutePath() + "getBlockInfo error");
                     }
-                    bi.getMInfos().add(str);
+                    String title = str.split("\t")[0];
+                    bi.getMInfos().put(title, str);
                 }
             }
         } catch (IOException e) {
@@ -64,7 +54,7 @@ public class BlockInfo implements Cloneable{
     }
 
     private static boolean isTitle(String str) {
-        return str.charAt(0) == '[' && str.endsWith("]");
+        return str.startsWith("[") && str.endsWith("]");
     }
 
     @Override

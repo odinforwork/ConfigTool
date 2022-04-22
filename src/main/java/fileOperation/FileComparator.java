@@ -1,12 +1,11 @@
 package fileOperation;
 
-import data.DTO.DifferentDTO;
-import data.File.BlockInfo;
-import data.File.FileInfo;
+import data.DTO.Different;
+import data.DTO.BlockInfo;
+import data.DTO.FileInfo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import utils.ConfigUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -34,14 +33,14 @@ public class FileComparator {
                 .collect(Collectors.toMap(File::getName, f -> f));
     }
 
-    public DifferentDTO compare() throws Exception {
+    public Different compare() throws Exception {
         var oldMap = loadingDir(mOldDir);
         var newMap = loadingDir(mNewDir);
 
         oldMap.forEach((key, value) -> log.info("old: " + key + "  " + value));
         newMap.forEach((key, value) -> log.info("new: " + key + "  " + value));
 
-        var different = new DifferentDTO();
+        var different = new Different();
         //new比old多的部分，放在新增
         newMap.entrySet().stream()
                 .filter(e -> !oldMap.containsKey(e.getKey()))
@@ -62,7 +61,7 @@ public class FileComparator {
         return different;
     }
 
-    private DifferentDTO.DifferentInFile compareFile(File oldFile, File newFile) throws RuntimeException {
+    private Different.DifferentInFile compareFile(File oldFile, File newFile) throws RuntimeException {
         if (!oldFile.getName().equals(newFile.getName())) {
             throw new RuntimeException("compareFile error");
         }
@@ -78,8 +77,7 @@ public class FileComparator {
         }
         var oldBlocks = oldFI.getMBlockInfos();
         var newBlocks = newFI.getMBlockInfos();
-        var dif = new DifferentDTO.DifferentInFile(fileName);
-        log.warn(fileName);
+        var dif = new Different.DifferentInFile(fileName);
 
         //new比old多的部分，放在新增
         newBlocks.entrySet().stream()
@@ -109,12 +107,12 @@ public class FileComparator {
         return dif;
     }
 
-    private DifferentDTO.DifferentInBlock compareBlock(BlockInfo oldBlock, BlockInfo newBlock) throws RuntimeException {
+    private Different.DifferentInBlock compareBlock(BlockInfo oldBlock, BlockInfo newBlock) throws RuntimeException {
         if (!oldBlock.getMBlockName().equals(newBlock.getMBlockName())) {
             throw new RuntimeException("compareBlock error");
         }
 
-        var dib = new DifferentDTO.DifferentInBlock(oldBlock.getMBlockName(), oldBlock, newBlock);
+        var dib = new Different.DifferentInBlock(oldBlock.getMBlockName(), oldBlock, newBlock);
         Map<String, String> newInfos = newBlock.getMInfos();
         Map<String, String> oldInfos = oldBlock.getMInfos();
 
@@ -122,7 +120,7 @@ public class FileComparator {
         newInfos.entrySet().stream()
                 .filter(e -> !oldInfos.containsKey(e.getKey()))
                 .map(e -> {
-                    return new DifferentDTO.DifferentInLine(
+                    return new Different.DifferentInLine(
                             e.getKey(),
                             -1,
                             -1,
@@ -135,7 +133,7 @@ public class FileComparator {
         //old比new多的部分，是删除
         oldInfos.entrySet().stream()
                 .filter(e -> !newInfos.containsKey(e.getKey()))
-                .map(e -> new DifferentDTO.DifferentInLine(
+                .map(e -> new Different.DifferentInLine(
                         e.getKey(),
                         0,
                         e.getValue().length() - 1,
@@ -156,14 +154,14 @@ public class FileComparator {
         return dib;
     }
 
-    public List<DifferentDTO.DifferentInLine> compare(String title, String o, String n) {
+    public List<Different.DifferentInLine> compare(String title, String o, String n) {
         return compareLine(title, o, n);
     }
 
-    private List<DifferentDTO.DifferentInLine> compareLine(String title, String o, String n) {
+    private List<Different.DifferentInLine> compareLine(String title, String o, String n) {
         if (o.equals(n)) return null;
 
-        List<DifferentDTO.DifferentInLine> result = new ArrayList<>();
+        List<Different.DifferentInLine> result = new ArrayList<>();
         String[] olds = o.split("\t");
         String[] news = n.split("\t");
         int nLength = news.length;
@@ -178,7 +176,7 @@ public class FileComparator {
             if (!olds[i].equals(news[i])) {
                 deleteEnd = deleteStart + olds[i].length();
                 insertEnd = insertStart + news[i].length();
-                result.add(new DifferentDTO.DifferentInLine(title, deleteStart, deleteEnd, insertStart, insertEnd));
+                result.add(new Different.DifferentInLine(title, deleteStart, deleteEnd, insertStart, insertEnd));
             }
             deleteStart += olds[i].length() + 1;
             insertStart += news[i].length() + 1;
@@ -186,9 +184,9 @@ public class FileComparator {
 
         //多出来的部分
         if (nLength > oLength) {
-            result.add(new DifferentDTO.DifferentInLine(title, -1, -1, insertStart, n.length()));
+            result.add(new Different.DifferentInLine(title, -1, -1, insertStart, n.length()));
         } else if(nLength < oLength){
-            result.add(new DifferentDTO.DifferentInLine(title, deleteStart, o.length(), -1, -1));
+            result.add(new Different.DifferentInLine(title, deleteStart, o.length(), -1, -1));
         }
 
         //行末尾的制表符
@@ -197,7 +195,7 @@ public class FileComparator {
             if(n.charAt(end) != '\t') break;
         }
         if(end != n.length()-1) {
-            result.add(new DifferentDTO.DifferentInLine(title, -1, -1, end+1, n.length()));
+            result.add(new Different.DifferentInLine(title, -1, -1, end+1, n.length()));
         }
 
         return result;

@@ -1,4 +1,4 @@
-package data.File;
+package data.DTO;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

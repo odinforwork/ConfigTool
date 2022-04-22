@@ -1,4 +1,4 @@
-package data.File;
+package data.DTO;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -55,19 +55,5 @@ public class BlockInfo implements Cloneable{
 
     private static boolean isTitle(String str) {
         return str.startsWith("[") && str.endsWith("]");
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    public BlockInfo copyList() {
-        try {
-            return  (BlockInfo) this.clone();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

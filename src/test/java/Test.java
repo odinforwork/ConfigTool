@@ -1,4 +1,4 @@
-import data.DTO.DifferentDTO;
+import data.DTO.Different;
 import fileOperation.FileComparator;
 import lombok.extern.log4j.Log4j2;
 
@@ -9,7 +9,7 @@ public class Test {
         String newDir = "/home/odin/workspace/new";
         var fileComparator = new FileComparator(oldDir, newDir);
 
-        DifferentDTO different = null;
+        Different different = null;
         try {
             different = fileComparator.compare();
         } catch (Exception e){

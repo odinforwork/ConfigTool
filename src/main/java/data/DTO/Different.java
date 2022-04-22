@@ -1,6 +1,5 @@
 package data.DTO;
 
-import data.File.BlockInfo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class DifferentDTO {
+public class Different {
     private final List<String> mNewFiles = new ArrayList<>(10);
     private final List<String> mDeleteFiles = new ArrayList<>(10);
     private final List<DifferentInFile> mDifferentInFiles = new ArrayList<>(10);

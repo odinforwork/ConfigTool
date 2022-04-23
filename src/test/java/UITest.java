@@ -6,52 +6,46 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class UITest extends JPanel implements ActionListener {
-    JButton mButton = new JButton("打开文件");
+public class UITest {
 
     public static void main(String[] args) {
-        JFrame jf = new JFrame("Config Tool");
-        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        jf.setSize(1600, 900);
-        jf.setResizable(false);
-
-        FileSelection panel = new FileSelection();
-        Box box = Box.createVerticalBox();
-        box.add(panel);
-
-        jf.setContentPane(box);
-        jf.setLocationRelativeTo(null);
-        jf.setVisible(true);
-
-    }
-
-    public UITest(){
         JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        mButton.setActionCommand("open");
-        mButton.setBackground(Color.GRAY);//设置按钮颜色
-        frame.getContentPane().add(mButton, BorderLayout.SOUTH);//建立容器使用边界布局
-        //
-        mButton.addActionListener(this);
-        frame.setTitle("标题");
-        frame.setSize(1080, 720);
+
+
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        for (int i = 0; i < 100; i++) {
+            sb.append("<p>this is a test. </p>");
+            sb2.append("<p><font size=\"10\" color=\"red\">that </font>is a test. </p>");
+        }
+
+
+        JTextPane newsTextPane = new JTextPane();
+        newsTextPane.setContentType("text/html");
+        newsTextPane.setEditable(false);
+        newsTextPane.setText(sb.toString());
+
+        JEditorPane textPane = new JEditorPane();
+        textPane.setContentType("text/html");
+        textPane.setEditable(false);
+        textPane.setText(sb2.toString());
 
         Box box = Box.createHorizontalBox();
-        box.add(this);
-        frame.setContentPane(box);
-        //显示窗口true
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+        box.add(newsTextPane);
+        box.add(textPane);
 
-    public void actionPerformed(ActionEvent e){
-        if (e.getActionCommand().equals("open")){
-            JFileChooser jf = new JFileChooser();
-            jf.showOpenDialog(this);//显示打开的文件对话框
-            File f =  jf.getSelectedFile();//使用文件类获取选择器选择的文件
-            String s = f.getAbsolutePath();//返回路径名
-            //JOptionPane弹出对话框类，显示绝对路径名
-            JOptionPane.showMessageDialog(this, s, "标题",JOptionPane.WARNING_MESSAGE);
-        }
+        JScrollPane scrollPane = new JScrollPane(box);
+        scrollPane.setVerticalScrollBarPolicy(
+                javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        Box box1 = Box.createVerticalBox();
+        box1.add(new JButton("000"));
+        box1.add(scrollPane);
+        frame.add(box1);
+        frame.setSize(300, 200);
+        frame.setVisible(true);
+
     }
 }
